@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>
+    AdonisJS - A fully featured web framework for Node.js
+  </title>
+
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+
+<body class="min-h-screen w-screen font-sans">
+
+  <div class="container mx-auto">
+    {{-- Nav --}}
+    @include('partials/nav')
+
+    {{-- Title --}}
+    <h1 class="text-2xl font-bold py-4">{{movie.title}}</h1>
+
+    {{-- Content --}}
+    @if (movie.content)
+    <div class="prose rounded-md bg-gray-100 p-4">{{{movie.content}}}</div>
+    @else
+    <p>No content</p>
+    @endif
+
+  </div>
+</body>
+
+</html>
