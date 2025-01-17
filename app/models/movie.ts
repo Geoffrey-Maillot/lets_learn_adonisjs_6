@@ -1,39 +1,40 @@
-import cache from '#services/cache_service'
-import MovieService from '#services/movie_service'
+import { DateTime } from 'luxon'
+import { BaseModel, column } from '@adonisjs/lucid/orm'
 
-export default class Movie {
+export default class Movie extends BaseModel {
+  @column({ isPrimary: true })
+  declare id: number
+
+  @column()
+  declare statusId: number
+
+  @column()
+  declare writerId: number
+
+  @column()
+  declare directorId: number
+
+  @column()
   declare title: string
+
+  @column()
   declare slug: string
-  declare summary?: string
-  declare content?: string
 
-  static async findAll() {
-    const files = await MovieService.readFiles('resources/movies')
-    let movies: Array<Movie> = []
+  @column()
+  declare summary: string | null
 
-    for (const fileName of files) {
-      const movie = await this.find(fileName)
+  @column()
+  declare abstract: string | null
 
-      if (movie) movies.push(movie)
-    }
-    return movies
-  }
+  @column()
+  declare posterUrl: string | null
 
-  static async find(slug: string) {
-    const hasCache = await cache.has(slug)
-    if (hasCache) {
-      console.log('cache hit')
-      return await cache.get<Movie>(slug)
-    }
+  @column()
+  declare releaseAt: DateTime | null
 
-    const md = await MovieService.read(slug + '.md')
-    const movie = new Movie()
-    movie.title = md.frontmatter.title
-    movie.slug = md.frontmatter.slug
-    movie.summary = md.frontmatter.summary
-    movie.content = md.contents.trim()
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
 
-    await cache.set(slug, movie)
-    return movie
-  }
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
 }
