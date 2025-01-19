@@ -4,13 +4,13 @@ import cache from '#services/cache_service'
 
 export default class MoviesController {
   async index({ view }: HttpContext) {
-    const movies = await Movie.findAll()
+    const movies = await Movie.all()
 
     return view.render('pages/home', { movies })
   }
 
   async show({ view, params }: HttpContext) {
-    const movie = await Movie.find(params.slug)
+    const movie = await Movie.findByOrFail('slug', params.slug)
 
     return view.render('pages/movies/show', { movie })
   }
